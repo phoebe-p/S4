@@ -1,6 +1,10 @@
 #ifndef _RNP_EIGENSYSTEMS_H_
 #define _RNP_EIGENSYSTEMS_H_
 
+#ifdef _MSC_VER 
+#include <algorithm>
+#endif
+
 #include <cstddef>
 #include <complex>
 

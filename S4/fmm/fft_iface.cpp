@@ -20,7 +20,7 @@
 #include "fft_iface.h"
 #include <cstdlib>
 
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 #include <fftw3.h>
 #else
 #include <kiss_fft.h>

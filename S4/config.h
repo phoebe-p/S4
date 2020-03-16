@@ -8,3 +8,7 @@
 #define PACKAGE_URL ""
 #define PACKAGE_VERSION "1.1.1"
 #define VERSION "1.1.1"
+
+#ifdef _MSC_VER 
+#define strcasecmp _stricmp
+#endif
