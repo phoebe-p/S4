@@ -17,8 +17,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-
 #include "Python.h"
 #include "numpy/arrayobject.h"
 
@@ -1488,7 +1486,7 @@ static PyObject *S4Sim_GetFieldsOnGridNumpy(S4Sim *self, PyObject *args, PyObjec
   /* strides[0] = strides[1]; */
   /* strides[1] = temp; */
   /* PyArray_UpdateFlags(Earr, NPY_ARRAY_UPDATE_ALL); */
-  PyArray_ENABLEFLAGS((PyArrayObject *)Earr, NPY_ARRAY_OWNDATA);
+  PyArray_ENABLEFLAGS(Earr, NPY_ARRAY_OWNDATA);
   /* PyArray_ENABLEFLAGS(Earr,  NPY_ARRAY_F_CONTIGUOUS); */
   PyObject *Harr;
   Harr = PyArray_SimpleNewFromData(3, dims, NPY_COMPLEX128, Hfields);
@@ -1499,7 +1497,7 @@ static PyObject *S4Sim_GetFieldsOnGridNumpy(S4Sim *self, PyObject *args, PyObjec
   /* strides[1] = temp; */
 
   /* PyArray_UpdateFlags(Harr, NPY_ARRAY_UPDATE_ALL); */
-  PyArray_ENABLEFLAGS((PyArrayObject *)Harr, NPY_ARRAY_OWNDATA);
+  PyArray_ENABLEFLAGS(Harr, NPY_ARRAY_OWNDATA);
   /* Harr->flags |= NPY_OWNDATA */
 
   /* PyArray_ENABLEFLAGS(Harr,  NPY_ARRAY_F_CONTIGUOUS); */

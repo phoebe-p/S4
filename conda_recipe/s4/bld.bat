@@ -13,7 +13,9 @@ setlocal EnableDelayedExpansion
 ::    set LIB_VER=140
 ::)
 
-CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+set DISTUTILS_USE_SDK=1
+::CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build/vcvarsall.bat" amd64 -vcvars_ver=14.0
 
 set "BLAS_PATH=%CONDA_PREFIX%/Library/lib/"
 set "BLAS_LIB=mkl_core_dll mkl_rt"
@@ -40,14 +42,14 @@ set "BOOST_PATH=%CONDA_PREFIX%\Library\lib\"
 set "BOOST_LIB="
 
 :: Specify custom compilers if needed
-set "CXX=cl /O2"
-set "CC=cl /O2"
+set "CXX=cl /O2 "
+set "CC=cl /O2 "
 
 set "OBJDIR=build"
 set "S4_BINNAME=%OBJDIR%/S4"
 set "S4_LIBNAME=%OBJDIR%/S4.lib"
 
-set "CPPFLAGS=-EHsc -MD -I. -IS4 -IS4/RNP -IS4/kiss_fft"
+set "CPPFLAGS=-EHa -MD -I. -IS4 -IS4/RNP -IS4/kiss_fft"
 set "CPPFLAGS=%CPPFLAGS% %BOOST_INC%"
 set "CPPFLAGS=%CPPFLAGS% -DHAVE_BLAS"
 set "CPPFLAGS=%CPPFLAGS% -DHAVE_LAPACK"
@@ -57,7 +59,6 @@ set "CPPFLAGS=%CPPFLAGS% -DHAVE_LIBCHOLMOD %CHOLMOD_INC%"
 
 set "LIBS=%BLAS_LIB% %LAPACK_LIB% %FFTW3_LIB% %PTHREAD_LIB% %CHOLMOD_LIB% %BOOST_LIB%"
 set "LIBPATHS=%BLAS_PATH% %LAPACK_PATH% %FFTW3_PATH% %PTHREAD_PATH% %CHOLMOD_PATH% %BOOST_PATH%"
-set "S4_LIBOBJS=%OBJDIR%/S4k/S4.obj %OBJDIR%/S4k/rcwa.obj %OBJDIR%/S4k/fmm_common.obj %OBJDIR%/S4k/fmm_FFT.obj %OBJDIR%/S4k/fmm_kottke.obj %OBJDIR%/S4k/fmm_closed.obj %OBJDIR%/S4k/fmm_PolBasisNV.obj %OBJDIR%/S4k/fmm_PolBasisVL.obj %OBJDIR%/S4k/fmm_PolBasisJones.obj %OBJDIR%/S4k/fmm_experimental.obj %OBJDIR%/S4k/fft_iface.obj %OBJDIR%/S4k/pattern.obj %OBJDIR%/S4k/intersection.obj %OBJDIR%/S4k/predicates.obj %OBJDIR%/S4k/numalloc.obj %OBJDIR%/S4k/gsel.obj %OBJDIR%/S4k/sort.obj %OBJDIR%/S4k/kiss_fft.obj %OBJDIR%/S4k/kiss_fftnd.obj %OBJDIR%/S4k/SpectrumSampler.obj %OBJDIR%/S4k/cubature.obj %OBJDIR%/S4k/Interpolator.obj %OBJDIR%/S4k/convert.obj"
 
 :: Make a build folder and change to it.
 ::cd S4
@@ -93,11 +94,10 @@ cd ..
 %CC% -c %CPPFLAGS% S4/cubature.c -Fo%OBJDIR%/S4k/cubature.obj
 %CC% -c %CPPFLAGS% S4/Interpolator.c -Fo%OBJDIR%/S4k/Interpolator.obj
 %CC% -c %CPPFLAGS% S4/convert.c -Fo%OBJDIR%/S4k/convert.obj
-%CXX% -c %CPPFLAGS% S4/RNP/Eigensystems.cpp -Fo%OBJDIR%/S4k/Eigensystems.obj
+IF DEFINED LAPACK_LIB (echo "using lapack") ELSE (%CXX% -c %CPPFLAGS% S4/RNP/Eigensystems.cpp -Fo%OBJDIR%/S4k/Eigensystems.obj)
 
 @echo on
 lib.exe %OBJDIR%/S4k/* /out:%S4_LIBNAME%
-
 
 
 set "LIBS=%LIBS:\=/%"
