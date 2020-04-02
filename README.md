@@ -1,5 +1,9 @@
-# Detailed installation instructions (64-bit Ubuntu 16 or 18):
+# Installation instructions:
+In principle you should be able to install this on Windows / OS X / Linux using conda and 'conda install -c marcus-o s4'.
+Install in a new environment to avoid incompatabilities.
+I don't have a large test base, so I would appreciate if you let me know if it works (marcus.ossiander at gmail) or not, then I'll try to help).
 
+# Detailed installation instructions (64-bit Ubuntu 16 or 18):
 ## Key steps:
 
 ```
