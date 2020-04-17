@@ -46,7 +46,7 @@ int fft_next_fast_size(int n){
 }
 
 std::complex<double> *fft_alloc_complex(size_t n){
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 	return (std::complex<double>*)(fftw_complex*)fftw_malloc(sizeof(fftw_complex) * n);
 #else
 	return (std::complex<double>*)KISS_FFT_MALLOC(sizeof(std::complex<double>) * n);
@@ -54,7 +54,7 @@ std::complex<double> *fft_alloc_complex(size_t n){
 }
 
 void fft_free(void *p){
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 	fftw_free(p);
 #else
 	KISS_FFT_FREE(p);
@@ -62,7 +62,7 @@ void fft_free(void *p){
 }
 
 struct tag_fft_plan{
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 	fftw_plan plan;
 #else
 	kiss_fftnd_cfg cfg;
@@ -76,7 +76,7 @@ fft_plan fft_plan_dft_2d(
 	int sign
 ){
 	fft_plan plan = NULL;
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 # ifdef HAVE_LIBPTHREAD
 	pthread_mutex_lock(&mutex);
 # endif
@@ -103,7 +103,7 @@ fft_plan fft_plan_dft_2d(
 }
 
 void fft_plan_exec(const fft_plan plan){
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 	fftw_execute(plan->plan);
 #else
 	kiss_fftnd(plan->cfg, (const kiss_fft_cpx *)plan->in, (kiss_fft_cpx *)plan->out);
@@ -112,7 +112,7 @@ void fft_plan_exec(const fft_plan plan){
 
 void fft_plan_destroy(fft_plan plan){
 	if(NULL == plan){ return; }
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 # ifdef HAVE_LIBPTHREAD
 	pthread_mutex_lock(&mutex);
 # endif
@@ -135,7 +135,7 @@ void fft_init(){
 }
 
 void fft_destroy(){
-#ifdef HAVE_LIBFFTW3
+#ifdef HAVE_FFTW3
 	fftw_cleanup();
 #endif
 #ifdef HAVE_LIBPTHREAD

@@ -18,17 +18,13 @@ set DISTUTILS_USE_SDK=1
 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build/vcvarsall.bat" amd64 -vcvars_ver=14.0
 
 set "BLAS_PATH=%CONDA_PREFIX%/Library/lib/"
-set "BLAS_LIB=mkl_core_dll mkl_rt"
+set "BLAS_LIB=mkl_rt"
 set "LAPACK_PATH=%CONDA_PREFIX%/Library/lib/"
-set "LAPACK_LIB=mkl_core_dll mkl_rt"
-::set "BLAS_PATH=%CONDA_PREFIX%/Library/lib/"
-::set "BLAS_LIB=openblas"
-::set "LAPACK_PATH=%CONDA_PREFIX%/Library/lib/"
-::set "LAPACK_LIB=openblas"
+set "LAPACK_LIB=mkl_rt"
 
-::set "FFTW3_INC=-I%CONDA_PREFIX%/include/"
-::set "FFTW3_PATH=%CONDA_PREFIX%/Library/lib/"
-::set "FFTW3_LIB=fftw3"
+set "FFTW3_INC=-I%CONDA_PREFIX%/Library/include/fftw"
+set "FFTW3_PATH=%CONDA_PREFIX%/Library/lib/"
+set "FFTW3_LIB=mkl_rt"
 
 ::set "PTHREAD_PATH=%CONDA_PREFIX%/Library/lib/"
 ::set "PTHREAD_LIB=pthread"
@@ -42,20 +38,22 @@ set "BOOST_PATH=%CONDA_PREFIX%\Library\lib\"
 set "BOOST_LIB="
 
 :: Specify custom compilers if needed
-set "CXX=cl /O2 "
-set "CC=cl /O2 "
+set "CXX=cl /O2"
+set "CC=cl /O2"
 
 set "OBJDIR=build"
 set "S4_BINNAME=%OBJDIR%/S4"
 set "S4_LIBNAME=%OBJDIR%/S4.lib"
 
-set "CPPFLAGS=-EHa -MD -I. -IS4 -IS4/RNP -IS4/kiss_fft"
+set "CPPFLAGS=-EHa -LD -MD -DCPU86 -I. -IS4 -IS4/RNP -IS4/kiss_fft"
+::enable debug output
+::set "CPPFLAGS=%CPPFLAGS% -DENABLE_S4_TRACE"
 set "CPPFLAGS=%CPPFLAGS% %BOOST_INC%"
-set "CPPFLAGS=%CPPFLAGS% -DHAVE_BLAS"
-set "CPPFLAGS=%CPPFLAGS% -DHAVE_LAPACK"
-::set "CPPFLAGS=%CPPFLAGS% -DHAVE_FFTW3 %FFTW3_INC%"
-:: set "CPPFLAGS=%CPPFLAGS% -DHAVE_LIBPTHREAD %PTHREAD_INC%"
-set "CPPFLAGS=%CPPFLAGS% -DHAVE_LIBCHOLMOD %CHOLMOD_INC%"
+IF DEFINED BLAS_LIB (set "CPPFLAGS=%CPPFLAGS% -DHAVE_BLAS")
+IF DEFINED LAPACK_LIB (set "CPPFLAGS=%CPPFLAGS% -DHAVE_LAPACK")
+IF DEFINED FFTW3_LIB (set "CPPFLAGS=%CPPFLAGS% -DHAVE_FFTW3 %FFTW3_INC%")
+IF DEFINED PTHREAD_LIB (set "CPPFLAGS=%CPPFLAGS% -DHAVE_LIBPTHREAD %PTHREAD_INC%")
+IF DEFINED CHOLMOD_LIB (set "CPPFLAGS=%CPPFLAGS% -DHAVE_LIBCHOLMOD %CHOLMOD_INC%")
 
 set "LIBS=%BLAS_LIB% %LAPACK_LIB% %FFTW3_LIB% %PTHREAD_LIB% %CHOLMOD_LIB% %BOOST_LIB%"
 set "LIBPATHS=%BLAS_PATH% %LAPACK_PATH% %FFTW3_PATH% %PTHREAD_PATH% %CHOLMOD_PATH% %BOOST_PATH%"
@@ -88,8 +86,8 @@ cd ..
 %CC% -c %CPPFLAGS% S4/numalloc.c -Fo%OBJDIR%/S4k/numalloc.obj
 %CC% -c %CPPFLAGS% S4/gsel.c -Fo%OBJDIR%/S4k/gsel.obj
 %CC% -c %CPPFLAGS% S4/sort.c -Fo%OBJDIR%/S4k/sort.obj
-%CC% -c %CPPFLAGS% S4/kiss_fft/kiss_fft.c -Fo%OBJDIR%/S4k/kiss_fft.obj
-%CC% -c %CPPFLAGS% S4/kiss_fft/tools/kiss_fftnd.c -Fo%OBJDIR%/S4k/kiss_fftnd.obj
+IF DEFINED FFTW3_LIB (echo "using fftw") ELSE (%CC% -c %CPPFLAGS% S4/kiss_fft/kiss_fft.c -Fo%OBJDIR%/S4k/kiss_fft.obj)
+IF DEFINED FFTW3_LIB (echo "using fftw") ELSE (%CC% -c %CPPFLAGS% S4/kiss_fft/tools/kiss_fftnd.c -Fo%OBJDIR%/S4k/kiss_fftnd.obj)
 %CC% -c %CPPFLAGS% S4/SpectrumSampler.c -Fo%OBJDIR%/S4k/SpectrumSampler.obj
 %CC% -c %CPPFLAGS% S4/cubature.c -Fo%OBJDIR%/S4k/cubature.obj
 %CC% -c %CPPFLAGS% S4/Interpolator.c -Fo%OBJDIR%/S4k/Interpolator.obj
@@ -113,7 +111,11 @@ echo:lib_dirs.extend^([libpath for libpath in '%LIBPATHS%'.split^(^)]^)
 echo:libs = ['S4']
 echo:libs.extend^([lib for lib in '%LIBS%'.split^(^)]^)
 echo:include_dirs = [np.get_include^(^)]
-echo:extra_compile_args = ["-O2"]
+echo:extra_compile_args = []
+::fixes the run time mismatch warning
+echo:extra_compile_args = ["-LD", "-MD"]
+echo:extra_link_args = []
+::echo:extra_link_args = ["/DEBUG", "/verbose:lib"]
 echo:print^(lib_dirs^)
 echo:print^(libs^)
 echo:print^(include_dirs^)
@@ -123,7 +125,8 @@ echo:	libraries = libs,
 echo:	library_dirs = lib_dirs,
 echo:	include_dirs = include_dirs,
 echo:	extra_objects = ['%S4_LIBNAME%'],
-echo:   extra_compile_args = extra_compile_args
+echo:   extra_compile_args = extra_compile_args,
+echo:   extra_link_args = extra_link_args
 echo:^)
 echo:
 echo:setup^(name = 'S4',

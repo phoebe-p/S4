@@ -238,7 +238,7 @@ int FMMGetEpsilon_PolBasisVL(const Simulation *S, const Layer *L, const int n, s
 		}
 		
 
-		fft_plan plan = fft_plan_dft_2d(ngrid, Ffrom, Fto, -1);
+		fft_plan plan = fft_plan_dft_2d(ngrid, Ffrom, Fto, 1);
 
 		// We fill in the quarter blocks of F in Fortran order
 		for(int w = 0; w < 4; ++w){
