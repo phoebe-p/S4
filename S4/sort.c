@@ -209,7 +209,9 @@ sort (void *const pbase, size_t total_elems, size_t size,
      of the array to sort, and END_PTR points at the very last element in
      the array (*not* one beyond it!). */
 
+#ifndef _MSC_VER
 #define min(x, y) ((x) < (y) ? (x) : (y))
+#endif
 
   {
     char *const end_ptr = &base_ptr[size * (total_elems - 1)];

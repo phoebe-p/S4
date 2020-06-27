@@ -50,7 +50,7 @@
 #include <numalloc.h>
 
 static inline void* rcwa_malloc(size_t size){
-	void *ret = malloc_aligned(size, 16);
+	void *ret = malloc_aligned(size, 128);
 	//memset(ret, 0x0, size);
 	return ret;
 }

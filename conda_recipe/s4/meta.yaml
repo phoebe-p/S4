@@ -7,7 +7,7 @@ source:
   path: ../../
 
 build:
-  number: 2
+  number: 5
 
 requirements:
   build:
@@ -32,7 +32,7 @@ requirements:
   run:
     - python
     - {{ pin_compatible('numpy') }}
-#    - {{ pin_compatible('boost') }}
+    - {{ pin_compatible('libboost') }}
     - {{ pin_compatible('suitesparse') }}
     - {{ pin_compatible('mkl') }} [win]
     - {{ pin_compatible('openblas') }} [unix]
