@@ -30,7 +30,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define _USE_MATH_DEFINES
 #endif
 
@@ -2169,7 +2169,7 @@ static PyObject *S4_NewInterpolator(PyObject *self, PyObject *args, PyObject *kw
 static PyObject *S4_SolveInParallel(PyObject *Self, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"Layer", "Simulations", NULL};
-	const char *layerName;
+	//const char *layerName;
 	//S4_solve_in
 	Py_RETURN_NONE;
 }

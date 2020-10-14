@@ -61,7 +61,7 @@ namespace bs = boost::serialization;
 
 
 void* S4_malloc(size_t size){ // for debugging
-	void* ret = malloc_aligned(size, 16);
+	void* ret = malloc_aligned(size, 128);
 	// memset(ret, 0x0, size);
 	return ret;
 }
@@ -2939,7 +2939,8 @@ int Simulation_GetField(Simulation *S, const double r[3], double fE[6], double f
 	}
 	std::complex<double> *work = ab + n4;
 
-	RNP::TBLAS::Copy(n4, Lsoln->ab,1, ab,1);
+	memcpy(ab, Lsoln->ab, sizeof(std::complex<double>) * n4);
+	//RNP::TBLAS::Copy(n4, Lsoln->ab,1, ab,1);
 	//RNP::IO::PrintVector(n4, ab, 1);
 	TranslateAmplitudes(S->n_G, Lbands->q, L->thickness, dz, ab);
 	std::complex<double> efield[3], hfield[3];
@@ -3051,7 +3052,8 @@ int Simulation_GetFieldPlane(Simulation *S, int nxy[2], double zz, double *E, do
 	}
 	std::complex<double> *work = ab + n4;
 
-	RNP::TBLAS::Copy(n4, Lsoln->ab,1, ab,1);
+	memcpy(ab, Lsoln->ab, sizeof(std::complex<double>) * n4);
+	//RNP::TBLAS::Copy(n4, Lsoln->ab,1, ab,1);
 	//RNP::IO::PrintVector(n4, ab, 1);
 	TranslateAmplitudes(S->n_G, Lbands->q, L->thickness, dz, ab);
 	size_t snxy[2] = { nxy[0], nxy[1] };

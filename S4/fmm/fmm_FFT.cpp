@@ -32,8 +32,8 @@
 #include "fmm.h"
 
 #include <limits>
-#include <kiss_fft.h>
-#include <tools/kiss_fftnd.h>
+//#include <kiss_fft.h>
+//#include <tools/kiss_fftnd.h>
 #include "fft_iface.h"
 
 int FMMGetEpsilon_FFT(const Simulation *S, const Layer *L, const int n, std::complex<double> *Epsilon2, std::complex<double> *Epsilon_inv){
