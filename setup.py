@@ -98,7 +98,7 @@ class MakefileClean(clean):
 setuptools.setup(name = 'S4B',
 	version = '1.1.2',
 	description = "Fork Stanford Stratified Structure Solver (S4B): Fourier Modal Method",
-        # install_requires=['fftw3', 'openblas', 'suitesparse'],
+        # install_requires=['fftw', 'openblas', 'suitesparse'],
         cmdclass = {'build_ext': alt_build_ext, 'clean':MakefileClean},
 	ext_modules = [S4module]
 )

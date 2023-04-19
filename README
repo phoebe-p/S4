@@ -8,3 +8,17 @@ See the S4 manual, in doc/index.html, for a complete
 description of the package and its user interface, as well as
 installation instructions, the license and copyright, contact
 addresses, and other important information.
+
+
+#############
+This fork can be installed  in linux using conda/mamba setup.py or pip install -e .
+
+In the selected environment
+
+```
+mamba install openblas fftw scikit-sparse suitesparse conda-build
+
+pip install -e .
+
+```
+

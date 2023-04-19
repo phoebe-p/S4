@@ -34,7 +34,7 @@ LAPACK_LIB = -lopenblas
 #  FTW3_LIB = -lfftw 
 #  May need to link libraries properly as with blas and lapack above
 FFTW3_INC =
-FFTW3_LIB = -lfftw3
+FFTW3_LIB = -lfftw
 
 # Typically,
 #  PTHREAD_INC = -DHAVE_UNISTD_H
@@ -46,10 +46,9 @@ FFTW3_LIB = -lfftw3
 # If not installed:
 # Fedora: dnf install libsuitsparse-devel
 # Typically, if installed:
-#CHOLMOD_INC = -I/usr/include/suitesparse
-CHOLMOD_INC=
+CHOLMOD_INC= -I${CONDA_PREFIX}/include
+# CHOLMOD_INC = 
 CHOLMOD_LIB = -lcholmod -lamd -lcolamd -lcamd -lccolamd
-CHOLMOD_INC = -I/usr/include/suitesparse
 #CHOLMOD_LIB = -lcholmod -lamd -lcolamd -lcamd -lccolamd
 #CHOLMOD_LIB=
 
