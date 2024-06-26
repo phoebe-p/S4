@@ -91,8 +91,8 @@ S4_BINNAME = $(OBJDIR)/S4
 S4_LIBNAME = $(OBJDIR)/libS4.a
 S4r_LIBNAME = $(OBJDIR)/libS4r.a
 
-BOOST_INC = -I/opt/homebrew/include/boost
-BOOST_LIBS = -lboost_serialization
+BOOST_INC = -I/opt/homebrew/include/boost -I/opt/homebrew/include/boost/serialization
+# BOOST_LIBS = -lboost_serialization
 # BOOST_LIBS = 
 
 ##################### DO NOT EDIT BELOW THIS LINE #####################
