@@ -187,7 +187,7 @@ typedef struct{
 typedef struct
 {
 	PyObject_HEAD
-	Interpolator I;
+	Interpolator intp;
 }S4Interpolator;
 
 typedef struct
@@ -566,7 +566,7 @@ static PyObject *S4Interpolator_new(PyTypeObject *type, PyObject *args, PyObject
 			free(interData.xy); interData.xy = NULL;
 			return NULL;
 		}
-		self->I = Interpolator_New(interData.n, interData.ny, interData.xy, inter_type);
+		self->intp = Interpolator_New(interData.n, interData.ny, interData.xy, inter_type);
 	}
 	free(interData.xy); interData.xy = NULL;
 	return (PyObject*)self;
@@ -581,7 +581,7 @@ static PyObject *S4Interpolator_Get(S4Interpolator *self, PyObject *args, PyObje
 	PyObject *ret;
 	if(!PyArg_ParseTupleAndKeywords(args, kwds, "d:Get", kwlist, &x))
 		return NULL;
-	ys = Interpolator_Get(self->I, x, &ny);
+	ys = Interpolator_Get(self->intp, x, &ny);
 	if(NULL == ys)
 		Py_RETURN_NONE;
 	ret = PyTuple_New(ny);
@@ -645,7 +645,7 @@ static void S4Sim_dealloc(S4Sim* self){
 
 static void S4Interpolator_dealloc(S4Interpolator *self)
 {
-	Interpolator_Destroy(self->I);
+	Interpolator_Destroy(self->intp);
 	Py_TYPE(self)->tp_free((PyObject*) self);
 }
 
@@ -1205,9 +1205,9 @@ static PyObject *S4Sim_GetPropagationConstants(S4Sim *self, PyObject *args, PyOb
 		return NULL;
 	}
 	n = Simulation_GetNumG(&(self->S), &G);
-    int n2 = 2*n; 
+    int n2 = 2*n;
     // q vector in S4 contains 2*n complex doubles, meaning we need a memory
-    // space that can accomodate 4*n doubles 
+    // space that can accomodate 4*n doubles
 	q = (double*)malloc(sizeof(double)*2*n2);
 	ret = Simulation_GetPropagationConstants(&(self->S), layer, q);
 	if(0 != ret){
@@ -1478,12 +1478,12 @@ static PyObject *S4Sim_GetFieldsOnGridNumpy(S4Sim *self, PyObject *args, PyObjec
   /* PyArray_Descr* desc = PyArray_DescrFromType(NPY_COMPLEX128); */
   Earr = PyArray_SimpleNewFromData(3, dims, NPY_COMPLEX128, Efields);
   /* PyArray_Dims new_dims; */
-  /* npy_intp tmp[3] = {1, 0, 2}; */ 
+  /* npy_intp tmp[3] = {1, 0, 2}; */
   /* new_dims.ptr = tmp; */
   /* new_dims.len = 3; */
   /* Earr = PyArray_Transpose(Earr, &new_dims); */
   /* npy_intp *strides = PyArray_STRIDES(Earr); */
-  /* npy_intp temp; */ 
+  /* npy_intp temp; */
   /* temp = strides[0]; */
   /* strides[0] = strides[1]; */
   /* strides[1] = temp; */
@@ -1511,7 +1511,7 @@ static PyObject *S4Sim_GetFieldsOnGridNumpy(S4Sim *self, PyObject *args, PyObjec
   /* if (!(EHfields = PyArray_Zeros(4, &dims, desc, 0))) { */
   /*   goto fail; */
   /* } */
-  
+
   /* return EHfields; */
   /* return Py_BuildValue("(OO)", Earr, Harr); */
   return Py_BuildValue("(NN)", Earr, Harr);

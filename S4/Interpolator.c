@@ -54,7 +54,7 @@ double* Interpolator_Get(const Interpolator I, double x, int *ny){
 	if(I->n < 1){ return NULL; }
 	const int ld = 1+I->ny;
 	int i, j;
-	
+
 	*ny = I->ny;
 	switch(I->type){
 	case Interpolator_CUBIC_SPLINE:
