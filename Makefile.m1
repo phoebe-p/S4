@@ -38,7 +38,7 @@ LUA_LIB = -L./lua-5.2.4/install/lib -llua -ldl -lm
 #  May need to link libraries properly as with blas and lapack above
 # FFTW3_INC = -I$(CONDA_PREFIX)/include/
 # FFTW3_LIB = -L$(CONDA_PREFIX)/lib/ -lfftw3
-FFTW3_INC =
+FFTW3_INC = -I/opt/homebrew/include/
 FFTW3_LIB = -lfftw3
 
 # Typically,
@@ -94,7 +94,6 @@ S4r_LIBNAME = $(OBJDIR)/libS4r.a
 BOOST_INC = -I/opt/homebrew/include/
 BOOST_LIBS = -lboost_serialization
 # will say -lboost_serialization is unused but this is A LIE, get "flat namespace" error without it!!!
-# BOOST_LIBS = 
 
 ##################### DO NOT EDIT BELOW THIS LINE #####################
 
@@ -327,6 +326,8 @@ FunctionSampler2D.so: modules/function_sampler_2d.c modules/function_sampler_2d.
 	gcc $(OPTFLAGS) -shared -fpic -Wall $(LUA_INC) -o $(OBJDIR)/FunctionSampler2D.so $(OBJDIR)/modules/function_sampler_2d.o $(OBJDIR)/modules/mod_predicates.o modules/lua_function_sampler_2d.c $(LUA_LIB)
 
 #### Python extension
+
+BOOST_PREFIX = /opt/homebrew/
 
 S4_pyext: objdir $(S4_LIBNAME)
 	sh gensetup.py.sh $(OBJDIR) $(S4_LIBNAME) "$(LIBS)" $(BOOST_PREFIX)
