@@ -81,7 +81,7 @@ CXX = clang++
 CC  = clang
 
 #CFLAGS += -O3 -fPIC
-CFLAGS = -Wall -O3 -m64 -mcpu=apple-m1 -mtune=native -fPIC
+CFLAGS = -Wall -O3 -m64 -mcpu=apple-m1 -mtune=native -fPIC -std=c++11
 
 # options for Sampler module
 OPTFLAGS = -O3
