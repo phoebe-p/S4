@@ -3054,7 +3054,7 @@ int Simulation_GetFieldPlane(Simulation *S, int nxy[2], double zz, double *E, do
 	RNP::TBLAS::Copy(n4, Lsoln->ab,1, ab,1);
 	//RNP::IO::PrintVector(n4, ab, 1);
 	TranslateAmplitudes(S->n_G, Lbands->q, L->thickness, dz, ab);
-	size_t snxy[2] = { nxy[0], nxy[1] };
+    size_t snxy[2] = { static_cast<size_t>(nxy[0]), static_cast<size_t>(nxy[1]) };
     std::complex<double> *P = NULL;
     std::complex<double> *W = NULL;
     std::complex<double> *epsilon = NULL;
