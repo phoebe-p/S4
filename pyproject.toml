@@ -1,0 +1,35 @@
+[build-system]
+requires = [
+    "setuptools>=80",
+    "setuptools-scm>=9.2",
+    "numpy>=2,<3",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "s4-fmm"
+dynamic = ["version"]
+description = "Stanford Stratified Structure Solver (S4): Fourier Modal Method"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL" }
+dependencies = [
+    "numpy>=1.26,<3",
+]
+
+[project.optional-dependencies]
+examples = [
+    "matplotlib>=3.8",
+]
+dev = [
+    "build>=1.2",
+    "matplotlib>=3.8",
+]
+
+[tool.setuptools]
+# S4 is a C extension, not a Python package directory structure
+# We only build the S4 extension module, no package discovery needed
+py-modules = []
+
+[tool.setuptools_scm]
+fallback_version = "1.1.0"
