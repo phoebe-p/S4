@@ -5,7 +5,7 @@ If you are looking for a more user-friendly interface to S4 (wavelength-dependen
 ## Python prerequisites
 
 ```
-pip install numpy wheel setuptools
+pip install numpy wheel setuptools setuptools-scm
 ```
 
 ## Key steps:
@@ -22,6 +22,42 @@ using Homebrew (see below). If you want to use Boost libraries in a different lo
 
 **Note for users of new (late 2020 onwards) Apple machines with M1/Apple silicon/ARM chips: you will need to use Makefile.m1
 to compile successfully, see notes below on how to do this.**
+
+## Python Package Information
+
+- **Distribution name**: `s4-fmm`
+- **Python import**: `import S4`
+- **Supported Python versions**: Python >=3.10,<3.14
+- **Supported NumPy versions**: NumPy >=1.26,<3 at runtime, NumPy >=2,<3 when building wheels
+
+These are initial maintained support ranges pending automated compatibility testing.
+
+## Conda Development Environment
+
+For development, you can use the provided conda environment:
+
+```bash
+conda env create -f environment.yml
+conda activate s4-dev
+make S4_pyext
+```
+
+Note that native libraries (BLAS, LAPACK, FFTW3, SuiteSparse, Boost) still need to be installed separately according to the platform-specific instructions below.
+
+## Versioning
+
+S4 now uses Git tags for versioning via setuptools-scm. To create a release:
+
+```bash
+git tag -a v1.1.0 -m "S4 Python package version 1.1.0"
+git push origin v1.1.0
+```
+
+The installed version can be checked with:
+
+```bash
+python -c "from importlib.metadata import version; print(version('s4-fmm'))"
+```
 
 ## Installing relevant libraries etc.:
 
@@ -46,17 +82,6 @@ brew install fftw suite-sparse openblas lapack boost
 ```
 
 You can get the make and git commands from homebrew, or through Apple Developer Tools. If the packages are installed/symlinked by Homebrew to the default location (/usr/local/include) you should not have to modify the Makefile, and you should be able to use the same Makefile as Ubuntu/Linux (i.e. no need to use Makefile.osx).
-
-*If you have multiple Python versions, you may need to modify the S4_pyext part of the Makefile:*
-
-````
-pip3 install --upgrade ./
-````
-
-to e.g.:
-```
-[path of target python or virtual environment] setup.py install
-```
 
 You can install S4 into a virtual environment automatically by just activating that environment in your terminal before running `make S4_pyext`.
 

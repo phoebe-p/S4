@@ -79,6 +79,7 @@ S4_PROF = 0
 # Specify custom compilers if needed
 CXX = g++
 CC  = gcc
+PYTHON ?= python3
 
 #CFLAGS += -O3 -fPIC
 CFLAGS = -Wall -O3 -m64 -march=native -mtune=native -msse3 -msse2 -msse -fPIC
@@ -96,7 +97,7 @@ S4r_LIBNAME = $(OBJDIR)/libS4r.a
 #### and PREFIX if you want to install boost to a different location
 
 # Specify the paths to the boost include and lib directories
-BOOST_-L$(BOOST_PREFIX)/lib/PREFIX=${CURDIR}/S4
+BOOST_PREFIX=${CURDIR}/S4
 BOOST_INC = -I$(BOOST_PREFIX)/include
 BOOST_LIBS =  -lboost_serialization
 BOOST_URL=https://sourceforge.net/projects/boost/files/boost/1.74.0/boost_1_74_0.tar.gz
@@ -348,8 +349,11 @@ FunctionSampler2D.so: modules/function_sampler_2d.c modules/function_sampler_2d.
 #### Python extension
 
 S4_pyext: objdir $(S4_LIBNAME)
-	sh gensetup.py.sh $(OBJDIR) $(S4_LIBNAME) "$(LIBS)" $(BOOST_PREFIX)
-	pip3 install --upgrade --use-pep517 --no-build-isolation ./
+	S4_OBJDIR="$(OBJDIR)" \
+	S4_LIBFILE="$(S4_LIBNAME)" \
+	S4_LINK_FLAGS='$(LIBS)' \
+	BOOST_PREFIX="$(BOOST_PREFIX)" \
+	$(PYTHON) -m pip install --upgrade --no-build-isolation .
 
 clean:
 	rm -rf $(OBJDIR)

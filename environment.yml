@@ -1,0 +1,20 @@
+# Conda development environment for S4 Python packaging
+# 
+# This file establishes Python-level development constraints only.
+# Native S4 build dependencies (BLAS, LAPACK, FFTW3, SuiteSparse, Boost)
+# are still installed separately according to existing platform instructions.
+# Full conda packaging of native dependencies will be addressed in a later task.
+
+name: s4-dev
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - numpy>=2,<3
+  - pip
+  - setuptools>=80
+  - setuptools-scm>=9.2
+  - python-build>=1.2
+  - matplotlib>=3.8
